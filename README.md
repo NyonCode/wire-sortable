@@ -1,2 +1,0 @@
-# wire-sortable
-READ ONLY
