@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace NyonCode\WireSortable;
 
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\HtmlString;
 use NyonCode\LaravelPackageToolkit\Commands\InstallCommand;
 use NyonCode\LaravelPackageToolkit\Packager;
 use NyonCode\LaravelPackageToolkit\PackageServiceProvider;
 use NyonCode\WireCore\Core\Plugin\PluginManager;
 use NyonCode\WireCore\Foundation\Assets\Bundle;
+use NyonCode\WireCore\Foundation\Icons\IconManager;
 use NyonCode\WireTable\Table;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class WireSortableServiceProvider extends PackageServiceProvider
 {
@@ -37,7 +36,8 @@ class WireSortableServiceProvider extends PackageServiceProvider
             })
             ->bootedPackage(function ($packager) {
                 $this->registerTableMacros();
-                $this->registerAssetRoutes();
+                $this->registerIcons();
+                Bundle::serve('wire-sortable', self::ASSETS_PATH);
             })
             ->hasConfig()
             ->hasViews()
@@ -58,28 +58,20 @@ class WireSortableServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Serve the package's pre-bundled drag controller (SortableJS included)
-     * directly so consumers get row and column reordering without running npm,
-     * a build step, `vendor:publish`, or a runtime CDN request. Mirrors the
-     * wire-core and wire-table delivery.
+     * The grip this package draws its handle with, through the canonical owner.
+     *
+     * A six-dot grip is in no icon set the framework ships, and the alternative
+     * to registering one is an inline `<svg>` in the handle partial — which is
+     * the thing the Icons rule exists to prevent. Registered from a `.svg` file
+     * rather than a PHP string so the markup stays markup, and prefixed so it
+     * cannot collide with a consumer's own `grip`.
      */
-    protected function registerAssetRoutes(): void
+    protected function registerIcons(): void
     {
-        Route::get('/wire-sortable/assets/{asset}.js', function (string $asset): BinaryFileResponse {
-            // The package ships a single bundle, `dist/wire-sortable.js`, so the
-            // route segment is the package suffix (`…/assets/sortable.js`)
-            // rather than a per-bundle name as in wire-core / wire-table.
-            $file = self::ASSETS_PATH.'/wire-'.basename($asset).'.js';
-
-            abort_unless(is_file($file), 404);
-
-            return response()
-                ->file($file, ['Content-Type' => 'application/javascript; charset=utf-8'])
-                ->setPublic()
-                ->setMaxAge(31536000);
-        })
-            ->where('asset', '[A-Za-z0-9_-]+')
-            ->name('wire-sortable.asset');
+        app(IconManager::class)->registerIconsFromDirectory(
+            __DIR__.'/../resources/icons',
+            'sortable',
+        );
     }
 
     protected function registerTableMacros(): void

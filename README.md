@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ONyklicek/WireStack/HEAD/docs-site/assets/brand/github/readme-banner-dark.png">
+  <img src="https://raw.githubusercontent.com/ONyklicek/WireStack/HEAD/docs-site/assets/brand/github/readme-banner-light.png" alt="WireStack" width="1200">
+</picture>
+
 # Wire Sortable
 
 Drag and drop row and column reordering for Wire Table.
@@ -5,8 +10,8 @@ Drag and drop row and column reordering for Wire Table.
 ## Requirements
 
 - PHP 8.2+
-- Laravel 10, 11, or 12
-- Livewire 3.x
+- Laravel 12.61+ or 13.12+
+- Livewire 4.x
 - Tailwind CSS 3.x
 - `nyoncode/wire-table`
 
@@ -99,7 +104,7 @@ key keep working unchanged.
 As with every Wire package, `@wireStackScripts` in the layout `<head>` puts the
 bundle in the initial document — the placement that survives a `wire:navigate`
 visit; the sortable view's own include remains a fallback. See
-[JavaScript Assets](../../docs/getting-started.md#javascript-assets).
+[JavaScript Assets](../../docs/start/getting-started.md#javascript-assets).
 
 ## Documentation
 
@@ -110,7 +115,7 @@ visit; the sortable view's own include remains a fallback. See
 | [Row Reordering](../../docs/sortable/row-sorting.md) | Persistent row order |
 | [Column Reordering](../../docs/sortable/column-sorting.md) | Per-user column order |
 | [API Reference](../../docs/sortable/api-reference.md) | Sortable table and trait API |
-| [Configuration](../../docs/configuration.md) | Package config reference |
+| [Configuration](../../docs/start/configuration.md) | Package config reference |
 
 ## License
 
